@@ -19,7 +19,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import codecs
 from flaskext.markdown import Markdown
-import urllib
 import plotly
 
 app = Flask(__name__,static_folder='./static/')
@@ -31,7 +30,7 @@ def index():
     listnews = []
     listgraph = []
     money_tables = []
-    f = open('text2.csv', 'r')
+    f = open('./static/stockcode/stockcode.csv', 'r')
     stock_list = csv.reader(f)
     for lists in stock_list:
         for i in lists:
