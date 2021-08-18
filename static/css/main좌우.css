@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+  }
+  
+  body li {
+    margin: 20px;
+    padding: 20px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 40px;
+    color: rgb(197, 72, 72);
+  }
+  
+  body img {
+    padding-left: auto;
+    float: auto;
+    max-width: 100%;
+  
+  
+  }
+  
+  .title {
+  
+    padding-top: 100px;
+    width: 100%;
+    display:inline-block;
+    padding-left: 10px;
+  }
+  
+  .content {
+  
+    width: 100%;
+  
+  }
+  .chart {
+    float: left;
+    display:inline-block;
+    width:49%;
+    padding-right: 1%;
+  
+  }
+    
+  .news{
+    float: right;
+    display:inline-block;
+  
+    padding-top: 50px;
+    padding-left: 1%;
+    max-width: 49%;
+  }
+  /*
+    * Create dark grey header with a white logo
+    */
+    
+  header {
+    background-color: #2B2B2B;
+    height: 35px;
+    width: 100%;
+    opacity: .9;
+    margin-bottom: 10px;
+  }
+    
+  header h1.logo {
+    margin: 0;
+    font-size: 1.7em;
+    color: #fff;
+    text-transform: uppercase;
+    float: left;
+  }
+    
+  header h1.logo:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+    
+  /*
+    * Center the body content
+    */
+    
+  .container {
+    width: 940px;
+    margin: 0 auto;
+  }
+    
+  .leftdiv {
+    float: left;
+    padding: 10px 0 30px 0;
+    background-color: #eeeeee;
+    -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+            border-radius: 6px;
+  }
+  .rightdiv {
+    float: right;
+    padding: 10px 0 30px 0;
+    background-color: #eeeeee;
+    -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+            border-radius: 6px;
+  }
+    
+  h2 {
+    font-size: 3em;
+    margin-top: 40px;
+    text-align: center;
+    letter-spacing: -2px;
+  }
+    
+  h3 {
+    font-size: 1.7em;
+    font-weight: 100;
+    margin-top: 30px;
+    text-align: center;
+    letter-spacing: -1px;
+    color: #999;
+  }
+  
+  .menu {
+    float: right;
+    margin-top: 8px;
+  }
+    
+  .menu li {
+    display: inline;
+  }
+    
+  .menu li + li {
+    margin-left: 35px;
+  }
+    
+  .menu li a {
+    color: #999;
+    text-decoration: none;
+  }
+  
+  
+  .df_with_style.set_properties(**{
+      'background-color':'white', 
+      'border':'1px solid black',
+      'font-size': '20px', 
+  })
+  
+  .tr:hover {
+    background-color: #ffff99;
+  }
+  
+  .cell_hover = {  # for row hover use <tr> instead of <td>
+    'selector': 'td:hover',
+    'props': [('background-color', '#ffffb3')]
+  }
+  .index_names = {
+    'selector': '.index_name',
+    'props': 'font-style: italic; color: darkgrey; font-weight:normal;'
+  }
+  .headers = {
+    'selector': 'th:not(.index_name)',
+    'props': 'background-color: #000066; color: white;'
+  }
+  

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/df_style.css') }}"/>
+    <link rel="javascript" type="text/javascript" href="{{ url_for('static', filename='js/hide.js') }}"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+
+
+
+
+  
+<body>
+    <div class = frame>
+
+        {% for pic , news, money_table in lists|zip(listnews , money_tables) %}
+
+        <div class = title>
+            <li>Stock Code : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}" target="_black">{{pic}}</a> </li> 
+            <input type='button' 
+                value='주식 숨기기' 
+                onclick='hideRow_a{{pic}}()' />
+            <input type='button' 
+                value='주식 보이기' 
+                onclick='showRow_a{{pic}}()' />
+        </div>
+        
+        <script language="javascript"> 
+            function hideRow_a{{pic}}()  {
+                const row = document.getElementById('a{{pic}}');
+                row.style.display = 'none';
+            }
+
+            function showRow_a{{pic}}()  {
+                const row = document.getElementById('a{{pic}}');
+                row.style.display = '';
+            }
+
+        </script>     
+                <script language="javascript"> 
+                    function hideRow_b{{pic}}()  {
+                        const row = document.getElementById('b{{pic}}');
+                        row.style.display = 'none';
+                    }
+        
+                    function showRow_b{{pic}}()  {
+                        const row = document.getElementById('b{{pic}}');
+                        row.style.display = '';
+                    }
+                </script> 
+        
+        <div class = content>
+
+            <table id='fruits' border="0">
+                
+                <tr id='a{{pic}}'><td>
+
+                <div class = chart>
+                    <img src = "{{url_for('static' , filename='image/stocklist/'+pic|string+'.png')}}"  /> 
+                </div>
+
+                <div class = news>
+                    {{news|safe}}
+                </div>
+
+                </td></tr>
+                
+            </table>
+
+            <table id='money' border="0">
+                
+                <tr><td>
+                <input type='button' 
+                    value='재무재표 숨기기' 
+                    onclick='hideRow_b{{pic}}()' />
+                <input type='button' 
+                    value='재무재표 보이기' 
+                    onclick='showRow_b{{pic}}()' />
+                </td></tr>
+
+                <tr id='b{{pic}}' style="display:none" ><td>
+                    {{money_table|safe}}
+                </td></tr>
+            </table>
+        </div> 
+    
+
+    </div>
+    </br>
+    </br>
+        {% endfor %}
+    </div>
+    <div style="width: 100%;">
+    <p></p>
+    <p></p>
+    <p></p>
+    </div>
+</body>
+
+</html>
+
+
+
+
+
+        <!-- <script language="javascript">
+            function toggle_display_{{pic}}(){
+                el = document.querySelector(".a{{pic}}");
+                
+                if(el.style.visibility == 'hidden'){
+                    el.style.visibility = 'visible'
+                }else{
+                   el.style.visibility = 'hidden'
+                }
+              } 
+            </script>
+            
+          <button onclick="toggle_display_{{pic}}()">Toggle display</button> 
+          <div class="a{{pic}}">See me no more</div> -->

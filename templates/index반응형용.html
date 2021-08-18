@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/df_style.css') }}"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+  
+<body>
+    <div class = frame>
+
+        {% for graph , news in lists|zip(listnews) %}
+        <div class = title>
+            <li>Stock Code : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}">{{pic}}</a> </li> 
+        </div>
+
+        <div class = title>
+
+            {{graph|safe}} 
+        </div>
+         
+        <div class = content>
+            {{news|safe}}
+
+        </div>
+        
+    </div>
+
+    </br>
+    </br>
+        {% endfor %}
+    </div>
+    <div style="width: 100%;">
+    <p></p>
+    <p></p>
+    <p></p>
+    </div>
+</body>
+
+</html>

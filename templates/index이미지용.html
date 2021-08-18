@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/df_style.css') }}"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- <script language="javascript">
+
+        var showHide = document.getElementById("showHide");
+        var demo = document.getElementById("demo");
+        showHide.onclick = function() {
+        if (demo.style.display == "block") {
+            demo.style.display = "none";
+        } else {
+            demo.style.display = "block";
+        }
+        }
+        
+
+    </script>
+
+    <script>
+        function SirenFunction(idMyDiv){
+             var objDiv = document.getElementById(idMyDiv);
+             if(objDiv.style.display=="block"){ objDiv.style.display = "none"; }
+              else{ objDiv.style.display = "block"; }
+        }
+    </script> -->
+
+</head>
+  
+<body>
+    <div class = frame>
+
+        {% for pic , news in lists|zip(listnews) %}
+
+        
+        <!-- <button id="showHide">Click Me</button>
+        <p id='demo' style='display: none'>Hello Javascript</p>
+        
+        <div class="con_inner">
+            <div class="sir_singo_msg">
+                신고가 접수되어 자동으로 블라인드 된 글입니다.<br>
+                원글을 보시려면 <a href="#" onclick="SirenFunction('SirenDiv'); return false;" class="blind_view">여기를</a> 클릭하세요
+            </div>
+            <div class="singo_view" id="SirenDiv">
+                내용보기
+            </div>
+        </div> -->
+        
+
+
+        <div class = title>
+            <li>Stock Code : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}">{{pic}}</a> </li> 
+        </div>
+
+        <div class = content>
+
+            <div class = chart>
+                <img src = "{{url_for('static' , filename='image/stocklist/'+pic|string+'.png')}}"  /> 
+            </div>
+
+            <div class = news>
+                {{news|safe}}
+            </div>
+        
+        </div> 
+    
+
+    </div>
+    </br>
+    </br>
+        {% endfor %}
+    </div>
+    <div style="width: 100%;">
+    <p></p>
+    <p></p>
+    <p></p>
+    </div>
+</body>
+
+</html>
