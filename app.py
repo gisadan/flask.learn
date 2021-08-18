@@ -30,7 +30,7 @@ def index():
     listnews = []
     listgraph = []
     money_tables = []
-    f = open('./static/stockcode/stockcode.csv', 'r')
+    f = open('./static/stockcode/stockcode.CSV', 'r')
     stock_list = csv.reader(f)
     for lists in stock_list:
         for i in lists:
