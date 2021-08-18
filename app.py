@@ -5,25 +5,19 @@ import pandas as pd
 from pandas_datareader import data as web 
 from datetime import datetime as dt
 import csv
-from os import write
 import dash
-from dash.dependencies import Input, Output
 import dash_core_components as dcc 
 import dash_html_components as html
 import yfinance as yf
-from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import os
 import requests
 import matplotlib.pyplot as plt
 import numpy as np
-import codecs
-from flaskext.markdown import Markdown
 import plotly
 
 app = Flask(__name__,static_folder='./static/')
 app.jinja_env.filters['zip'] = zip
-Markdown(app)
+
 
 @app.route('/')
 def index():
