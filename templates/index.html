@@ -21,10 +21,10 @@
 <body>
     <div class = frame>
 
-        {% for pic , news, money_table in lists|zip(listnews , money_tables) %}
+        {% for pic , news, money_table , company in lists|zip(listnews , money_tables , stock_code_name) %}
 
         <div class = title>
-            <li>Stock Code : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}" target="_black">{{pic}}</a> </li> 
+            <li>Company : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}" target="_black">{{company}}</a> </li> 
             <input type='button' 
                 value='주식 숨기기' 
                 onclick='hideRow_a{{pic}}()' />

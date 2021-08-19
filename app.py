@@ -24,6 +24,19 @@ def index():
     listnews = []
     listgraph = []
     money_tables = []
+    stock_code_name = []
+#### 주식코드 , 회사이름으로 변경하기 위해 따오기 ####
+    stock_code = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download', header=0)[0] 
+    stock_code.sort_values(['상장일'], ascending=True)
+    stock_code = stock_code[['회사명', '종목코드']] 
+    stock_code = stock_code.rename(columns={'회사명': 'company', '종목코드': 'code'}) 
+    stock_code.code = stock_code.code.map('{:06d}'.format) 
+
+
+    stock_code.set_index('code', inplace = True)
+    stock_code = stock_code.sort_values(by=['code'], ascending=True) 
+
+
     f = open('./static/stockcode/stockcode.CSV', 'r')
     stock_list = csv.reader(f)
     for lists in stock_list:
@@ -95,8 +108,7 @@ def index():
         #     graphfile = "./static/image/stocklist1/{}.html".format(i)
         #     gp = open(graphfile, "r", encoding='utf-8') 
         #     G= gp.read()
-        #     listgraph.append(G)
-        
+        #     listgraph.append(G)        
 
         ### 여기서부터 뉴스 ###
             # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
@@ -178,7 +190,13 @@ def index():
             money_tables.append(M)
 
 
-    return render_template('index.html', listnews = listnews , lists = lists , money_tables = money_tables )
+        #### 여기부터 종목코드 회사이름으로 ####
+
+            C = stock_code.loc[i].values
+            stock_code_name.append(C)
+
+
+    return render_template('index.html', listnews = listnews , lists = lists , money_tables = money_tables , stock_code_name = stock_code_name )
 
 
 
