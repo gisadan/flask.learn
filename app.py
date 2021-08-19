@@ -41,6 +41,8 @@ def index():
     stock_list = csv.reader(f)
     for lists in stock_list:
         for i in lists:
+
+        ### 여기부터 주석처리 ###    
             # url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
             # url = '{url}&page={page}'.format(url=url, page=1)
             # print(url)
@@ -72,20 +74,18 @@ def index():
             # # 일자(date)를 기준으로 오름차순 정렬 
             # df = df.sort_values(by=['date'], ascending=True) 
 
-            # # # 단순형 그래프 그리기
-            # # plt.figure(figsize=(10,4))
-            # # plt.plot(df['date'], df['close'])
-            # # plt.xlabel('date')
-            # # plt.ylabel('close')
-            # # plt.tick_params(
-            # #     axis='x',          # changes apply to the x-axis
-            # #     which='both',      # both major and minor ticks are affected
-            # #     bottom=False,      # ticks along the bottom edge are off
-            # #     top=False,         # ticks along the top edge are off
-            # #     labelbottom=True) # labels along the bottom edge are off
-            # # plt.savefig('./static/image/stocklist/'+ i + ".png")
-            # # plt.show()
-        
+            # # 단순형 그래프 그리기
+            # plt.figure(figsize=(12,6))
+            # plt.plot(df['date'], df['close'])
+            # plt.xlabel('date')
+            # plt.ylabel('close')
+            # plt.tick_params(
+            #     axis='x',          # changes apply to the x-axis
+            #     which='both',      # both major and minor ticks are affected
+            #     bottom=True,      # ticks along the bottom edge are off
+            #     top=False,         # ticks along the top edge are off
+            #     labelbottom=True) # labels along the bottom edge are off
+            # plt.savefig('./static/image/stocklist/'+ i + ".png")        
 
             # # 반응형 그래프 그리기
             # fig = px.line(df, x='date', y='close', title='{}의 종가(close) Time Series'.format(i))
@@ -209,11 +209,6 @@ def index():
 #     # full_filepath = os.listdir(path)
 #     return render_template("stocklist.html", pics ="./static/image/stocklist/")
 #     # return render_template("stocklist.html")
-
-@app.route('/SomeFunction')
-def SomeFunction():
-    print('In SomeFunction')
-    return "Nothing"
 
 
 if __name__ == "__main__":
