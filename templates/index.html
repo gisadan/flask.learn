@@ -24,7 +24,7 @@
         {% for pic , news, money_table , company in lists|zip(listnews , money_tables , stock_code_name) %}
 
         <div class = title>
-            <li>Company : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}" target="_black">{{company}}({{pic}})</a> </li> 
+            <p><h3 style="display:inline">Company : <a href="https://finance.naver.com/item/main.nhn?code={{pic}}" target="_black">{{company}}({{pic}})</a>  <h6 style="display:inline">(클릭시 네이버금융 이동)</h6></h3></p>
             <input type='button' 
                 value='주식 숨기기' 
                 onclick='hideRow_a{{pic}}()' />
