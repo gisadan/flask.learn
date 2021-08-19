@@ -192,7 +192,7 @@ def index():
 
         #### 여기부터 종목코드 회사이름으로 ####
 
-            C = stock_code.loc[i].values
+            C = stock_code.loc[i].values[0]
             stock_code_name.append(C)
 
 
