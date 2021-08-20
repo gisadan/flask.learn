@@ -42,50 +42,50 @@ def index():
     for lists in stock_list:
         for i in lists:
 
-        ### 여기부터 주석처리 ###    
-            # url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
-            # url = '{url}&page={page}'.format(url=url, page=1)
-            # print(url)
-            # header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
-            # res = requests.get(url, headers = header)
-            # df = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
+        ## 여기부터 주석처리 ###    
+            url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
+            url = '{url}&page={page}'.format(url=url, page=1)
+            print(url)
+            header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
+            res = requests.get(url, headers = header)
+            df = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
             
-            # for page in range(2,31):
-            #     url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
-            #     url = '{url}&page={page}'.format(url=url, page=page)
-            #     # print(url)
-            #     header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
-            #     res = requests.get(url, headers = header)
-            #     A = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
-            #     df = df.append(A, ignore_index=True)
-            #     # print(df)
+            for page in range(2,31):
+                url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
+                url = '{url}&page={page}'.format(url=url, page=page)
+                # print(url)
+                header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
+                res = requests.get(url, headers = header)
+                A = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
+                df = df.append(A, ignore_index=True)
+                # print(df)
 
-            # # df.dropna()를 이용해 결측값 있는 행 제거 
-            # df = df.dropna() 
+            # df.dropna()를 이용해 결측값 있는 행 제거 
+            df = df.dropna() 
 
-            # # 한글로 된 컬럼명을 영어로 바꿔줌 
-            # df = df.rename(columns= {'날짜': 'date', '종가': 'close', '전일비': 'diff', '시가': 'open', '고가': 'high', '저가': 'low', '거래량': 'volume'}) 
-            # # 데이터의 타입을 int형으로 바꿔줌 
-            # df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[['close', 'diff', 'open', 'high', 'low', 'volume']].astype(int) 
+            # 한글로 된 컬럼명을 영어로 바꿔줌 
+            df = df.rename(columns= {'날짜': 'date', '종가': 'close', '전일비': 'diff', '시가': 'open', '고가': 'high', '저가': 'low', '거래량': 'volume'}) 
+            # 데이터의 타입을 int형으로 바꿔줌 
+            df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[['close', 'diff', 'open', 'high', 'low', 'volume']].astype(int) 
 
-            # # 컬럼명 'date'의 타입을 date로 바꿔줌 
-            # df['date'] = pd.to_datetime(df['date']) 
+            # 컬럼명 'date'의 타입을 date로 바꿔줌 
+            df['date'] = pd.to_datetime(df['date']) 
 
-            # # 일자(date)를 기준으로 오름차순 정렬 
-            # df = df.sort_values(by=['date'], ascending=True) 
+            # 일자(date)를 기준으로 오름차순 정렬 
+            df = df.sort_values(by=['date'], ascending=True) 
 
-            # # 단순형 그래프 그리기
-            # plt.figure(figsize=(12,6))
-            # plt.plot(df['date'], df['close'])
-            # plt.xlabel('date')
-            # plt.ylabel('close')
-            # plt.tick_params(
-            #     axis='x',          # changes apply to the x-axis
-            #     which='both',      # both major and minor ticks are affected
-            #     bottom=True,      # ticks along the bottom edge are off
-            #     top=False,         # ticks along the top edge are off
-            #     labelbottom=True) # labels along the bottom edge are off
-            # plt.savefig('./static/image/stocklist/'+ i + ".png")        
+            # 단순형 그래프 그리기
+            plt.figure(figsize=(12,6))
+            plt.plot(df['date'], df['close'])
+            plt.xlabel('date')
+            plt.ylabel('close')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom=True,      # ticks along the bottom edge are off
+                top=False,         # ticks along the top edge are off
+                labelbottom=True) # labels along the bottom edge are off
+            plt.savefig('./static/image/stocklist/'+ i + ".png")        
 
             # # 반응형 그래프 그리기
             # fig = px.line(df, x='date', y='close', title='{}의 종가(close) Time Series'.format(i))
@@ -112,20 +112,12 @@ def index():
 
         ### 여기서부터 뉴스 ###
         
-            # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
-            # # url = "https://finance.naver.com/item/news_news.nhn?code=000020&page=&sm=title_entity_id.basic&clusterId="
-            # dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
+            #### 뉴스를 html로 저장하기 ####
+            url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
+            dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
             # Z =dfnews[0].to_html
             # listnews.append(Z)
-            # end_news = dfnews[0].to_html()
-
-
-            # #### 뉴스를 html로 저장하기 ####
-            # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
-            # dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
-            # # Z =dfnews[0].to_html
-            # # listnews.append(Z)
-            # dfnews[0].to_html("./static/news/"+i+'.html')
+            dfnews[0].to_html("./static/news/"+i+'.html')
 
             # #### 뉴스를 html을 마크다운으로 저장하기 ####
             # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
@@ -133,7 +125,6 @@ def index():
             # # Z =dfnews[0].to_html
             # # listnews.append(Z)
             # dfnews[0].to_markdown("./static/news/"+i+'.markdown')
-
 
 
             # #### html로 저장된 뉴스 csv파일 그대로 불러오기 ####
