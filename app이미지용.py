@@ -5,80 +5,87 @@ import pandas as pd
 from pandas_datareader import data as web 
 from datetime import datetime as dt
 import csv
-from os import write
 import dash
-from dash.dependencies import Input, Output
 import dash_core_components as dcc 
 import dash_html_components as html
 import yfinance as yf
-from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import os
 import requests
 import matplotlib.pyplot as plt
 import numpy as np
-import codecs
-from flaskext.markdown import Markdown
-import urllib
 import plotly
 
 app = Flask(__name__,static_folder='./static/')
 app.jinja_env.filters['zip'] = zip
-Markdown(app)
+
 
 @app.route('/')
 def index():
     listnews = []
     listgraph = []
-    f = open('text2.csv', 'r')
+    money_tables = []
+    stock_code_name = []
+#### 주식코드 , 회사이름으로 변경하기 위해 따오기 ####
+    stock_code = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download', header=0)[0] 
+    stock_code.sort_values(['상장일'], ascending=True)
+    stock_code = stock_code[['회사명', '종목코드']] 
+    stock_code = stock_code.rename(columns={'회사명': 'company', '종목코드': 'code'}) 
+    stock_code.code = stock_code.code.map('{:06d}'.format) 
+
+
+    stock_code.set_index('code', inplace = True)
+    stock_code = stock_code.sort_values(by=['code'], ascending=True) 
+
+
+    f = open('./static/stockcode/stockcode.CSV', 'r')
     stock_list = csv.reader(f)
     for lists in stock_list:
         for i in lists:
-            # url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
-            # url = '{url}&page={page}'.format(url=url, page=1)
-            # print(url)
-            # header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
-            # res = requests.get(url, headers = header)
-            # df = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
+
+        ### 여기부터 주석처리 ###    
+            url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
+            url = '{url}&page={page}'.format(url=url, page=1)
+            print(url)
+            header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
+            res = requests.get(url, headers = header)
+            df = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
             
-            # for page in range(2,31):
-            #     url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
-            #     url = '{url}&page={page}'.format(url=url, page=page)
-            #     # print(url)
-            #     header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
-            #     res = requests.get(url, headers = header)
-            #     A = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
-            #     df = df.append(A, ignore_index=True)
-            #     # print(df)
+            for page in range(2,31):
+                url = 'http://finance.naver.com/item/sise_day.nhn?code={}'.format(i)     
+                url = '{url}&page={page}'.format(url=url, page=page)
+                # print(url)
+                header = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.73'}  
+                res = requests.get(url, headers = header)
+                A = pd.read_html(res.text, header=0, encoding='euc-kr')[0]
+                df = df.append(A, ignore_index=True)
+                # print(df)
 
-            # # df.dropna()를 이용해 결측값 있는 행 제거 
-            # df = df.dropna() 
+            # df.dropna()를 이용해 결측값 있는 행 제거 
+            df = df.dropna() 
 
-            # # 한글로 된 컬럼명을 영어로 바꿔줌 
-            # df = df.rename(columns= {'날짜': 'date', '종가': 'close', '전일비': 'diff', '시가': 'open', '고가': 'high', '저가': 'low', '거래량': 'volume'}) 
-            # # 데이터의 타입을 int형으로 바꿔줌 
-            # df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[['close', 'diff', 'open', 'high', 'low', 'volume']].astype(int) 
+            # 한글로 된 컬럼명을 영어로 바꿔줌 
+            df = df.rename(columns= {'날짜': 'date', '종가': 'close', '전일비': 'diff', '시가': 'open', '고가': 'high', '저가': 'low', '거래량': 'volume'}) 
+            # 데이터의 타입을 int형으로 바꿔줌 
+            df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[['close', 'diff', 'open', 'high', 'low', 'volume']].astype(int) 
 
-            # # 컬럼명 'date'의 타입을 date로 바꿔줌 
-            # df['date'] = pd.to_datetime(df['date']) 
+            # 컬럼명 'date'의 타입을 date로 바꿔줌 
+            df['date'] = pd.to_datetime(df['date']) 
 
-            # # 일자(date)를 기준으로 오름차순 정렬 
-            # df = df.sort_values(by=['date'], ascending=True) 
+            # 일자(date)를 기준으로 오름차순 정렬 
+            df = df.sort_values(by=['date'], ascending=True) 
 
-            # # # 단순형 그래프 그리기
-            # # plt.figure(figsize=(10,4))
-            # # plt.plot(df['date'], df['close'])
-            # # plt.xlabel('date')
-            # # plt.ylabel('close')
-            # # plt.tick_params(
-            # #     axis='x',          # changes apply to the x-axis
-            # #     which='both',      # both major and minor ticks are affected
-            # #     bottom=False,      # ticks along the bottom edge are off
-            # #     top=False,         # ticks along the top edge are off
-            # #     labelbottom=True) # labels along the bottom edge are off
-            # # plt.savefig('./static/image/stocklist/'+ i + ".png")
-            # # plt.show()
-        
+            # 단순형 그래프 그리기
+            plt.figure(figsize=(12,6))
+            plt.plot(df['date'], df['close'])
+            plt.xlabel('date')
+            plt.ylabel('close')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom=True,      # ticks along the bottom edge are off
+                top=False,         # ticks along the top edge are off
+                labelbottom=True) # labels along the bottom edge are off
+            plt.savefig('./static/image/stocklist/'+ i + ".png")        
 
             # # 반응형 그래프 그리기
             # fig = px.line(df, x='date', y='close', title='{}의 종가(close) Time Series'.format(i))
@@ -101,24 +108,24 @@ def index():
         #     graphfile = "./static/image/stocklist1/{}.html".format(i)
         #     gp = open(graphfile, "r", encoding='utf-8') 
         #     G= gp.read()
-        #     listgraph.append(G)
-        
+        #     listgraph.append(G)        
 
         ### 여기서부터 뉴스 ###
-            # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
-            # # url = "https://finance.naver.com/item/news_news.nhn?code=000020&page=&sm=title_entity_id.basic&clusterId="
-            # dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
+        
+            url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
+            # url = "https://finance.naver.com/item/news_news.nhn?code=000020&page=&sm=title_entity_id.basic&clusterId="
+            dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
+            Z =dfnews[0].to_html
+            listnews.append(Z)
+            end_news = dfnews[0].to_html()
+
+
+            #### 뉴스를 html로 저장하기 ####
+            url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
+            dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
             # Z =dfnews[0].to_html
             # listnews.append(Z)
-            # end_news = dfnews[0].to_html()
-
-
-            # #### 뉴스를 html로 저장하기 ####
-            # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
-            # dfnews = pd.read_html(url, header = 0 , encoding='euc-kr')
-            # # Z =dfnews[0].to_html
-            # # listnews.append(Z)
-            # dfnews[0].to_html("./static/news/"+i+'.html')
+            dfnews[0].to_html("./static/news/"+i+'.html')
 
             # #### 뉴스를 html을 마크다운으로 저장하기 ####
             # url = "https://finance.naver.com/item/news_news.nhn?code={}&page=&sm=title_entity_id.basic&clusterId=".format(i)
@@ -166,9 +173,31 @@ def index():
             # dfnews = read_html(csvfile, header = 0 , encoding='utf-8')
             # Z =dfnews[0].to_html
             # listnews.append(Z)
+            #잠시만안녕
 
 
-    return render_template('index.html', listnews = listnews, lists = lists )
+
+        #### 여기서부터 재무재표 ####
+            # #### html 파일로 만들기 ####
+            # url = "https://finance.naver.com/item/main.nhn?code={}".format(i)
+            # df = pd.read_html(url, header = 0 , encoding='euc-kr')
+            # df[3].to_html("./static/money_tables/"+i+'.html')
+
+
+            #### html로 저장된 재무재표 html 파일 그대로 불러오기 ####
+            moneyfile = "./static/money_tables/{}.html".format(i)
+            mt = open(moneyfile, "r", encoding='utf-8') 
+            M= mt.read()
+            money_tables.append(M)
+
+
+        #### 여기부터 종목코드 회사이름으로 ####
+
+            C = stock_code.loc[i].values[0]
+            stock_code_name.append(C)
+
+
+    return render_template('index.html', listnews = listnews , lists = lists , money_tables = money_tables , stock_code_name = stock_code_name )
 
 
 
@@ -181,6 +210,7 @@ def index():
 #     # full_filepath = os.listdir(path)
 #     return render_template("stocklist.html", pics ="./static/image/stocklist/")
 #     # return render_template("stocklist.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
